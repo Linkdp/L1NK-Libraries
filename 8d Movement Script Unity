@@ -1,0 +1,36 @@
+using UnityEngine;
+
+public class PlayerRotation2D : MonoBehaviour
+{
+    public float speed = 5f;
+    private Vector2 movement;
+    private Rigidbody2D rb;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Update()
+    {
+        // Get input
+        movement.x = Input.GetAxis("Horizontal");
+        movement.y = Input.GetAxis("Vertical");
+    }
+
+    void FixedUpdate()
+    {
+        // Apply movement
+        rb.velocity = movement * speed;
+
+        // Rotate the player if there is movement
+        if (movement != Vector2.zero)
+        {
+            // Calculate the angle in degrees (using Atan2 returns radians, so convert to degrees)
+            float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
+
+            // Apply the rotation around the Z-axis (for 2D)
+            // Adjust the -90f offset if your sprite is oriented differently (e.g., facing right by default)
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+        }
+    }
